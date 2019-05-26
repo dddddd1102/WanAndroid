@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.dd.wanandroid.R;
 import com.dd.wanandroid.entity.BasicData;
@@ -45,7 +46,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         initData();
-
+        initEvent();
     }
 
     @Override
@@ -90,6 +91,15 @@ public class SearchActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void initEvent() {
+        tagLayout.setOnTagIndexClickListener(new TagLayout.OnTagIndexClickListener() {
+            @Override
+            public void onClickIndex(int index) {
+                Toast.makeText(SearchActivity.this, "select: " + hotKeyList.get(index).getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private List<HotKey> queryHotKeys() {
