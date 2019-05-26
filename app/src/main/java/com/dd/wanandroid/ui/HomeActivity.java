@@ -1,0 +1,179 @@
+package com.dd.wanandroid.ui;
+
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.dd.wanandroid.R;
+import com.dd.wanandroid.ui.fragment.HomeFragment;
+import com.dd.wanandroid.ui.fragment.MeFragment;
+import com.dd.wanandroid.ui.fragment.TreeFragment;
+
+public class HomeActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    private static final String TAG = "WanAndroid#HomeActivity";
+
+    private BottomNavigationView bottomNavigationView;
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
+    private NavigationView navigationView;
+    private ImageView ivUser;
+    private TextView tvUser;
+    private LinearLayout headerView;
+
+    private BottomSheetDialog bottomSheetUser;
+
+    private HomeFragment homeFragment;
+
+    private TreeFragment treeFragment;
+
+    private MeFragment meFragment;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        initView();
+        initData();
+        initEvent();
+    }
+
+    private void initView() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        View view = getLayoutInflater().inflate(R.layout.dialog_bottom_user, null);
+        bottomSheetUser = new BottomSheetDialog(this);
+        bottomSheetUser.setContentView(view);
+        ivUser = navigationView.getHeaderView(0).findViewById(R.id.iv_user);
+        tvUser = navigationView.getHeaderView(0).findViewById(R.id.tv_user);
+//        headerView = navigationView.getHeaderView(0).findViewById(R.id.header);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void initData() {
+        homeFragment = HomeFragment.newInstance();
+        treeFragment = TreeFragment.newInstance();
+        meFragment = MeFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.layout_content, homeFragment).commit();
+    }
+
+    private void initEvent() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                switch (item.getItemId()) {
+                    case R.id.action_home:
+                        toolbar.setTitle(R.string.menu_home);
+                        transaction.replace(R.id.layout_content, homeFragment);
+                        break;
+                    case R.id.action_tag:
+                        toolbar.setTitle(R.string.menu_tag);
+                        transaction.replace(R.id.layout_content, treeFragment);
+                        break;
+                    case R.id.action_me:
+                        toolbar.setTitle(R.string.menu_me);
+                        transaction.replace(R.id.layout_content, meFragment);
+                        break;
+                }
+                transaction.commit();
+                return true;
+            }
+        });
+        ivUser.setOnClickListener(this);
+        tvUser.setOnClickListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_user:
+            case R.id.tv_user:
+                if (bottomSheetUser.isShowing()) {
+                    bottomSheetUser.hide();
+                } else {
+                    bottomSheetUser.show();
+                }
+                break;
+        }
+    }
+}
