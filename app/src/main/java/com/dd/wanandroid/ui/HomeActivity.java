@@ -1,11 +1,13 @@
 package com.dd.wanandroid.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,9 +21,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dd.wanandroid.R;
+import com.dd.wanandroid.entity.BasicData;
+import com.dd.wanandroid.entity.HotKey;
+import com.dd.wanandroid.help.RetrofitHelper;
 import com.dd.wanandroid.ui.fragment.HomeFragment;
 import com.dd.wanandroid.ui.fragment.MeFragment;
 import com.dd.wanandroid.ui.fragment.TreeFragment;
+
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -44,6 +58,8 @@ public class HomeActivity extends AppCompatActivity
     private TreeFragment treeFragment;
 
     private MeFragment meFragment;
+
+    private List<HotKey> hotKeyList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +95,37 @@ public class HomeActivity extends AppCompatActivity
         treeFragment = TreeFragment.newInstance();
         meFragment = MeFragment.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.layout_content, homeFragment).commit();
+
+        hotKeyList = queryHotKeys();
+        if (hotKeyList.size() > 0) {
+            return;
+        }
+        RetrofitHelper.getInstance().getHotKeys().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BasicData<List<HotKey>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(BasicData<List<HotKey>> listBasicData) {
+                        if (listBasicData.getErrorCode() == 0) {
+                            hotKeyList = listBasicData.getData();
+                            saveHotKeys();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: " + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     private void initEvent() {
@@ -132,7 +179,9 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -175,5 +224,20 @@ public class HomeActivity extends AppCompatActivity
                 }
                 break;
         }
+    }
+
+    private List<HotKey> queryHotKeys() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<HotKey> hotKeys = realm.where(HotKey.class).findAll();
+        return realm.copyFromRealm(hotKeys);
+    }
+
+    private void saveHotKeys() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        for (HotKey hotKey : hotKeyList) {
+            realm.copyToRealmOrUpdate(hotKey);
+        }
+        realm.commitTransaction();
     }
 }
