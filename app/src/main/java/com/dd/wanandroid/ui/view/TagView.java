@@ -136,4 +136,5 @@ public class TagView extends TextView {
         initContentSize();
         invalidate();
     }
+
 }

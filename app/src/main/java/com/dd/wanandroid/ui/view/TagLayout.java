@@ -3,7 +3,6 @@ package com.dd.wanandroid.ui.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,12 @@ public class TagLayout extends ViewGroup {
     private int currentLineWidth = 0;
 
     private int childHeight;
+
+    private OnTagIndexClickListener onTagIndexClickListener;
+
+    public void setOnTagIndexClickListener(OnTagIndexClickListener listener) {
+        onTagIndexClickListener = listener;
+    }
 
     public TagLayout(Context context) {
         this(context, null);
@@ -125,12 +130,28 @@ public class TagLayout extends ViewGroup {
     }
 
     public void addTags(List<HotKey> hotKeys) {
-        for (HotKey hotKey : hotKeys) {
+        removeAllViews();
+        for (int i = 0; i < hotKeys.size(); i++) {
+            final int index = i;
+            HotKey hotKey = hotKeys.get(i);
             TagView tagView = (TagView) LayoutInflater.from(getContext()).inflate(R.layout.item_tag, this, false);
             tagView.setTagText(hotKey.getName());
+            tagView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onTagIndexClickListener != null) {
+                        onTagIndexClickListener.onClickIndex(index);
+                    }
+                }
+            });
             addView(tagView);
         }
         requestLayout();
         invalidate();
+    }
+
+    public interface OnTagIndexClickListener {
+
+        void onClickIndex(int index);
     }
 }
