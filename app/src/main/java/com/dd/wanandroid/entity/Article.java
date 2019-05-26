@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Date;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -58,6 +59,8 @@ public class Article extends RealmObject {
     private int visible;
 
     private int zan;
+
+    private RealmList<Tag> tags;
 
     public String getApkLink() {
         return apkLink;
@@ -233,6 +236,15 @@ public class Article extends RealmObject {
 
     public void setZan(int zan) {
         this.zan = zan;
+    }
+
+
+    public RealmList<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(RealmList<Tag> tags) {
+        this.tags = tags;
     }
 
     @NonNull

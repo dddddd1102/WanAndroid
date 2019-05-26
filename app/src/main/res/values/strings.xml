@@ -23,5 +23,9 @@
     <string name="user_change">切换账号</string>
     <string name="app_version">v1.0</string>
     <string name="title_activity_web">WebActivity</string>
+    <string name="app_top">置顶</string>
+    <string name="app_new">新</string>
+    <string name="app_tag_placeholder">标签</string>
+    <string name="app_tag">%s/%s</string>
 
 </resources>

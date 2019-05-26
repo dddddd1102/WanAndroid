@@ -26,4 +26,17 @@
             <enum name="matrix" value="7" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="TagView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_radius" format="dimension" />
+        <attr name="horizontal_padding" format="dimension" />
+        <attr name="vertical_padding" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="tag_backgroundColor" format="color" />
+        <attr name="tag_textSize" format="dimension" />
+        <attr name="tag_text" format="reference|string" />
+        <attr name="tag_textColor" format="color" />
+        <attr name="tag_selectedBackgroundColor" format="color" />
+    </declare-styleable>
 </resources>
