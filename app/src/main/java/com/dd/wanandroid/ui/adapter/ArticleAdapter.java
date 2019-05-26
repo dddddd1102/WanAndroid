@@ -16,9 +16,6 @@ import com.dd.wanandroid.listener.OnItemClickListener;
 import com.dd.wanandroid.ui.view.TagView;
 
 import java.util.List;
-import java.util.Objects;
-
-import io.realm.Realm;
 
 /**
  * WanAndroid

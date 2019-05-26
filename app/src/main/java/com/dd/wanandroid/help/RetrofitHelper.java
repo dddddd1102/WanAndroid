@@ -4,6 +4,7 @@ import com.dd.wanandroid.App;
 import com.dd.wanandroid.entity.ArticleData;
 import com.dd.wanandroid.entity.BannerInfo;
 import com.dd.wanandroid.entity.BasicData;
+import com.dd.wanandroid.entity.HotKey;
 import com.dd.wanandroid.entity.Tree;
 import com.dd.wanandroid.service.ApiService;
 import com.dd.wanandroid.util.NetworkUtils;
@@ -137,4 +138,7 @@ public class RetrofitHelper {
         return apiService.getTrees();
     }
 
+    public Observable<BasicData<List<HotKey>>> getHotKeys() {
+        return apiService.getHotKeys();
+    }
 }

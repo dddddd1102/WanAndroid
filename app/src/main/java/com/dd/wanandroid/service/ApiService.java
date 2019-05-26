@@ -3,6 +3,7 @@ package com.dd.wanandroid.service;
 import com.dd.wanandroid.entity.ArticleData;
 import com.dd.wanandroid.entity.BannerInfo;
 import com.dd.wanandroid.entity.BasicData;
+import com.dd.wanandroid.entity.HotKey;
 import com.dd.wanandroid.entity.Tree;
 
 import java.util.List;
@@ -29,5 +30,8 @@ public interface ApiService {
 
     @GET("tree/json")
     Observable<BasicData<List<Tree>>> getTrees();
+
+    @GET("hotkey/json")
+    Observable<BasicData<List<HotKey>>> getHotKeys();
 
 }
