@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.dd.wanandroid.R;
 import com.dd.wanandroid.entity.HotKey;
+import com.dd.wanandroid.entity.Tree;
 
 import java.util.List;
 
@@ -136,6 +137,27 @@ public class TagLayout extends ViewGroup {
             HotKey hotKey = hotKeys.get(i);
             TagView tagView = (TagView) LayoutInflater.from(getContext()).inflate(R.layout.item_tag, this, false);
             tagView.setTagText(hotKey.getName());
+            tagView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onTagIndexClickListener != null) {
+                        onTagIndexClickListener.onClickIndex(index);
+                    }
+                }
+            });
+            addView(tagView);
+        }
+        requestLayout();
+        invalidate();
+    }
+
+    public void addTrees(List<Tree> trees) {
+        removeAllViews();
+        for (int i = 0; i < trees.size(); i++) {
+            final int index = i;
+            Tree tree = trees.get(i);
+            TagView tagView = (TagView) LayoutInflater.from(getContext()).inflate(R.layout.item_tag, this, false);
+            tagView.setTagText(tree.getName());
             tagView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
