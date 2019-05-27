@@ -12,8 +12,11 @@ import android.widget.TextView;
 import com.dd.wanandroid.R;
 import com.dd.wanandroid.entity.Article;
 import com.dd.wanandroid.entity.Tree;
+import com.dd.wanandroid.ui.view.TagLayout;
 
 import java.util.List;
+
+import io.realm.RealmList;
 
 /**
  * WanAndroid
@@ -47,6 +50,8 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
     public void onBindViewHolder(@NonNull TreeHolder holder, int position) {
         Tree tree = trees.get(position);
         holder.tvTitle.setText(tree.getName());
+        RealmList<Tree> children = tree.getChildren();
+        holder.tagLayout.addTrees(children);
     }
 
     @Override
@@ -58,11 +63,13 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
 
         ImageView ivArrow;
         TextView tvTitle;
+        TagLayout tagLayout;
 
         TreeHolder(View itemView) {
             super(itemView);
             ivArrow = itemView.findViewById(R.id.iv_arrow);
             tvTitle = itemView.findViewById(R.id.tv_title);
+            tagLayout = itemView.findViewById(R.id.tl_sub);
         }
     }
 }
