@@ -15,6 +15,7 @@ import android.webkit.WebViewClient;
 
 import com.dd.wanandroid.R;
 import com.dd.wanandroid.ui.view.BaseWebView;
+import com.gyf.immersionbar.ImmersionBar;
 
 public class WebActivity extends AppCompatActivity {
 
@@ -26,6 +27,10 @@ public class WebActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        ImmersionBar.with(this)
+                .fitsSystemWindows(true)
+                .statusBarColor(R.color.colorPrimaryDark)
+                .init();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
