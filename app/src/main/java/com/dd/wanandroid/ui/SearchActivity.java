@@ -15,6 +15,7 @@ import com.dd.wanandroid.entity.BasicData;
 import com.dd.wanandroid.entity.HotKey;
 import com.dd.wanandroid.help.RetrofitHelper;
 import com.dd.wanandroid.ui.view.TagLayout;
+import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        ImmersionBar.with(this)
+                .fitsSystemWindows(true)
+                .statusBarColor(R.color.colorPrimaryDark)
+                .init();
         Toolbar toolbar = findViewById(R.id.toolbar);
         tagLayout = findViewById(R.id.tag_layout);
         setSupportActionBar(toolbar);
