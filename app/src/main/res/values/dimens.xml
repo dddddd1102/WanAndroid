@@ -22,4 +22,5 @@
     <!-- TagLayout -->
     <dimen name="horizontal_space">16dp</dimen>
     <dimen name="vertical_space">8dp</dimen>
+    <dimen name="vertical_space_large">12dp</dimen>
 </resources>

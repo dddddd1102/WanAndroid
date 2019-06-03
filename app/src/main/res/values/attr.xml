@@ -44,4 +44,10 @@
         <attr name="horizontal_space" format="dimension" />
         <attr name="vertical_space" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="ItemView">
+        <attr name="has_switch" format="boolean" />
+        <attr name="android:src" />
+        <attr name="android:text" />
+    </declare-styleable>
 </resources>

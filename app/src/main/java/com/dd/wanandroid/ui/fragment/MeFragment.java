@@ -1,16 +1,37 @@
 package com.dd.wanandroid.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.dd.wanandroid.R;
+import com.dd.wanandroid.ui.LoginActivity;
+import com.dd.wanandroid.ui.view.ItemView;
 
-public class MeFragment extends Fragment {
+public class MeFragment extends Fragment implements View.OnClickListener {
+
+    private static final int REQUEST_CODE = 1000;
+
+    private View rootView;
+
+    private ConstraintLayout clHeader;
+
+    private ItemView itemCollection;
+
+    private ItemView itemNightMode;
+
+    private ItemView itemSetting;
+
+    private ItemView itemAbout;
+
+    private ItemView itemLogout;
 
     public MeFragment() {
         // Required empty public constructor
@@ -28,7 +49,11 @@ public class MeFragment extends Fragment {
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_me, container, false);
+        assert inflater != null;
+        rootView = inflater.inflate(R.layout.fragment_me, container, false);
+        initView();
+        initEvent();
+        return rootView;
     }
 
     @Override
@@ -41,4 +66,57 @@ public class MeFragment extends Fragment {
         super.onDetach();
     }
 
+    private void initView() {
+        clHeader = rootView.findViewById(R.id.cl_header);
+        itemCollection = rootView.findViewById(R.id.item_collect);
+        itemNightMode = rootView.findViewById(R.id.item_night_mode);
+        itemSetting = rootView.findViewById(R.id.item_setting);
+        itemAbout = rootView.findViewById(R.id.item_about);
+        // TODO 需要添加登陆判断，如果未登陆不显示此选项
+        itemLogout = rootView.findViewById(R.id.item_logout);
+    }
+
+    private void initEvent() {
+        clHeader.setOnClickListener(this);
+        itemCollection.setOnClickListener(this);
+        itemNightMode.setOnClickListener(this);
+        itemSetting.setOnClickListener(this);
+        itemAbout.setOnClickListener(this);
+        itemLogout.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.cl_header:
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+                break;
+            case R.id.item_collect:
+                Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.item_night_mode:
+                Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.item_setting:
+                Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.item_about:
+                Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.item_logout:
+                Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            // TODO 处理数据
+        }
+    }
 }
