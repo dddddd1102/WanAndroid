@@ -5,12 +5,17 @@ import com.dd.wanandroid.entity.BannerInfo;
 import com.dd.wanandroid.entity.BasicData;
 import com.dd.wanandroid.entity.HotKey;
 import com.dd.wanandroid.entity.Tree;
+import com.dd.wanandroid.entity.User;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * WanAndroid
@@ -33,5 +38,9 @@ public interface ApiService {
 
     @GET("hotkey/json")
     Observable<BasicData<List<HotKey>>> getHotKeys();
+
+    @FormUrlEncoded
+    @POST("user/login")
+    Observable<BasicData<User>> login(@Field("username") String username, @Field("password") String password);
 
 }

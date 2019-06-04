@@ -9,11 +9,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dd.wanandroid.R;
+import com.dd.wanandroid.entity.User;
 import com.dd.wanandroid.ui.LoginActivity;
 import com.dd.wanandroid.ui.view.ItemView;
+
+import io.realm.Realm;
 
 public class MeFragment extends Fragment implements View.OnClickListener {
 
@@ -22,6 +26,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private View rootView;
 
     private ConstraintLayout clHeader;
+
+    private TextView tvUsername;
 
     private ItemView itemCollection;
 
@@ -52,6 +58,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         assert inflater != null;
         rootView = inflater.inflate(R.layout.fragment_me, container, false);
         initView();
+        initData();
         initEvent();
         return rootView;
     }
@@ -68,12 +75,25 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
     private void initView() {
         clHeader = rootView.findViewById(R.id.cl_header);
+        tvUsername = rootView.findViewById(R.id.tv_user_name);
         itemCollection = rootView.findViewById(R.id.item_collect);
         itemNightMode = rootView.findViewById(R.id.item_night_mode);
         itemSetting = rootView.findViewById(R.id.item_setting);
         itemAbout = rootView.findViewById(R.id.item_about);
         // TODO 需要添加登陆判断，如果未登陆不显示此选项
         itemLogout = rootView.findViewById(R.id.item_logout);
+    }
+
+    private void initData() {
+        Realm realm = Realm.getDefaultInstance();
+        User user = realm.where(User.class).findFirst();
+        if (user == null) {
+            tvUsername.setText(R.string.me_login_or_register);
+            clHeader.setClickable(true);
+        } else {
+            tvUsername.setText(user.getUsername());
+            clHeader.setClickable(false);
+        }
     }
 
     private void initEvent() {
@@ -117,6 +137,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             // TODO 处理数据
+            initData();
+
         }
     }
 }

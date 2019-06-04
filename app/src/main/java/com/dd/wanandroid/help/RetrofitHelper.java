@@ -6,6 +6,7 @@ import com.dd.wanandroid.entity.BannerInfo;
 import com.dd.wanandroid.entity.BasicData;
 import com.dd.wanandroid.entity.HotKey;
 import com.dd.wanandroid.entity.Tree;
+import com.dd.wanandroid.entity.User;
 import com.dd.wanandroid.service.ApiService;
 import com.dd.wanandroid.util.NetworkUtils;
 import com.google.gson.Gson;
@@ -106,7 +107,7 @@ public class RetrofitHelper {
 
     private Retrofit createRetrofit(OkHttpClient client) {
         return new Retrofit.Builder()
-                .baseUrl("http://www.wanandroid.com/")
+                .baseUrl("https://www.wanandroid.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
@@ -140,5 +141,9 @@ public class RetrofitHelper {
 
     public Observable<BasicData<List<HotKey>>> getHotKeys() {
         return apiService.getHotKeys();
+    }
+
+    public Observable<BasicData<User>> login(String username, String password) {
+        return apiService.login(username, password);
     }
 }
