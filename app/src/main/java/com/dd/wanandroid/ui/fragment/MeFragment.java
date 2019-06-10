@@ -84,7 +84,20 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         itemLogout = rootView.findViewById(R.id.item_logout);
     }
 
-    private void initData() {
+    private void initData() {}
+
+    private void initEvent() {
+        clHeader.setOnClickListener(this);
+        itemCollection.setOnClickListener(this);
+        itemNightMode.setOnClickListener(this);
+        itemSetting.setOnClickListener(this);
+        itemAbout.setOnClickListener(this);
+        itemLogout.setOnClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         Realm realm = Realm.getDefaultInstance();
         User user = realm.where(User.class).findFirst();
         if (user == null) {
@@ -94,15 +107,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             tvUsername.setText(user.getUsername());
             clHeader.setClickable(false);
         }
-    }
-
-    private void initEvent() {
-        clHeader.setOnClickListener(this);
-        itemCollection.setOnClickListener(this);
-        itemNightMode.setOnClickListener(this);
-        itemSetting.setOnClickListener(this);
-        itemAbout.setOnClickListener(this);
-        itemLogout.setOnClickListener(this);
     }
 
     @Override
@@ -137,8 +141,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             // TODO 处理数据
-            initData();
-
         }
     }
 }
