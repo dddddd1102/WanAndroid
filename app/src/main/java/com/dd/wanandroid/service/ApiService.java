@@ -43,4 +43,7 @@ public interface ApiService {
     @POST("user/login")
     Observable<BasicData<User>> login(@Field("username") String username, @Field("password") String password);
 
+    @GET("/user/logout/json")
+    Observable<BasicData<String>> logout();
+
 }

@@ -146,4 +146,8 @@ public class RetrofitHelper {
     public Observable<BasicData<User>> login(String username, String password) {
         return apiService.login(username, password);
     }
+
+    public Observable<BasicData<String>> logout() {
+        return apiService.logout();
+    }
 }

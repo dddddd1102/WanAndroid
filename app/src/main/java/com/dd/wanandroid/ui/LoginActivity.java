@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                             User user = userBasicData.getData();
                             Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                             saveUser(user);
-                            finishActivity(1000);
+                            finish();
                         } else {
                             Toast.makeText(LoginActivity.this, userBasicData.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
