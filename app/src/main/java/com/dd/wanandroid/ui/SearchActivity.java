@@ -1,13 +1,10 @@
 package com.dd.wanandroid.ui;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.dd.wanandroid.R;
@@ -19,7 +16,6 @@ import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -52,6 +48,11 @@ public class SearchActivity extends AppCompatActivity {
 
         initData();
         initEvent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

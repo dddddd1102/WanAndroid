@@ -22,6 +22,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.SearchActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
