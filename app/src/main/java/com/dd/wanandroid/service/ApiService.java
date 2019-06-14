@@ -1,5 +1,6 @@
 package com.dd.wanandroid.service;
 
+import com.dd.wanandroid.entity.Article;
 import com.dd.wanandroid.entity.ArticleData;
 import com.dd.wanandroid.entity.BannerInfo;
 import com.dd.wanandroid.entity.BasicData;
@@ -29,6 +30,9 @@ public interface ApiService {
 
     @GET("article/list/{page}/json")
     Observable<BasicData<ArticleData>> getArticles(@Path("page") int page);
+
+    @GET("article/top/json")
+    Observable<BasicData<List<Article>>> getTopArticle();
 
     @GET("project/list/{page}/json?cid=294")
     Observable<BasicData<ArticleData>> getProjects(@Path("page") int page);

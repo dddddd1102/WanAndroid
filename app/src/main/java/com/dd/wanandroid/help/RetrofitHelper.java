@@ -1,6 +1,7 @@
 package com.dd.wanandroid.help;
 
 import com.dd.wanandroid.App;
+import com.dd.wanandroid.entity.Article;
 import com.dd.wanandroid.entity.ArticleData;
 import com.dd.wanandroid.entity.BannerInfo;
 import com.dd.wanandroid.entity.BasicData;
@@ -129,6 +130,10 @@ public class RetrofitHelper {
 
     public Observable<BasicData<ArticleData>> getArticles(int page) {
         return apiService.getArticles(page);
+    }
+
+    public Observable<BasicData<List<Article>>> getTopArticles() {
+        return apiService.getTopArticle();
     }
 
     public Observable<BasicData<ArticleData>> getProjects(int page) {

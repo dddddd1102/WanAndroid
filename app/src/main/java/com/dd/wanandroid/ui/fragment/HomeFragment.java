@@ -56,6 +56,8 @@ public class HomeFragment extends Fragment {
 
     private List<Article> articles;
 
+    private List<Article> topArticles;
+
     private ArticleAdapter articleAdapter;
 
     public HomeFragment() {
@@ -117,13 +119,46 @@ public class HomeFragment extends Fragment {
         articles = queryArticles();
         banners = queryBannerInfos();
 
-        if (articles.size() > 0 && banners.size() > 0) {
-            Log.d(TAG, "query data from realm.");
-            initBanner();
-            articleAdapter.setArticles(articles);
-            return;
-        }
+        RetrofitHelper.getInstance().getTopArticles().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BasicData<List<Article>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
+
+                    @Override
+                    public void onNext(BasicData<List<Article>> articleDataBasicData) {
+                        Log.d(TAG, "onNext: ");
+                        if (articleDataBasicData.getErrorCode() == 0) {
+                            topArticles = articleDataBasicData.getData();
+                            if (articles.size() > 0 && banners.size() > 0) {
+                                Log.d(TAG, "query data from realm.");
+                                initBanner();
+                                articles.addAll(0, topArticles);
+
+                                articleAdapter.setArticles(articles, topArticles.size());
+                            } else {
+                                queryData();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: " + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                    }
+                });
+
+
+    }
+
+    private void queryData() {
         Observable<BasicData<List<BannerInfo>>> bannerInfos = RetrofitHelper.getInstance().getBanners();
         final Observable<BasicData<ArticleData>> articlesObs = RetrofitHelper.getInstance().getArticles(0);
         Observable.merge(bannerInfos, articlesObs)
@@ -154,7 +189,8 @@ public class HomeFragment extends Fragment {
                         } else if (basicData.getData() instanceof ArticleData) {
                             Log.d(TAG, "onNext#ArticleData#");
                             articles = ((ArticleData) basicData.getData()).getDatas();
-                            articleAdapter.setArticles(articles);
+                            articles.addAll(0, topArticles);
+                            articleAdapter.setArticles(articles, topArticles.size());
                             saveArticle();
                         }
                     }

@@ -24,9 +24,13 @@ import java.util.List;
  */
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleHolder> {
 
+    private static final String TAG = "ArticleAdapter";
+
     private List<Article> articles;
 
     private static OnItemClickListener sListener;
+
+    private static int topSize = 0;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         sListener = listener;
@@ -51,8 +55,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleH
         holder.tvAuthor.setText(article.getAuthor());
         holder.tvChapter.setText(holder.tvTag.getContext().getString(R.string.app_tag, article.getSuperChapterName(), article.getChapterName()));
         holder.tvDate.setText(article.getNiceDate());
-        //TODO 20190526 置顶逻辑判断代确认
-        holder.tvTop.setVisibility(article.getZan() > 0 ? View.VISIBLE : View.GONE);
+        Log.d(TAG, "onBindViewHolder: topSize=" + topSize + ", position=" + position);
+        holder.tvTop.setVisibility(position < topSize ? View.VISIBLE : View.GONE);
         holder.tvNew.setVisibility(article.isFresh() ? View.VISIBLE : View.GONE);
         holder.ivCollection.setVisibility(article.isCollect() ? View.VISIBLE : View.GONE);
         holder.tvTag.setVisibility(View.GONE);
@@ -78,8 +82,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleH
         return articles == null ? 0 : articles.size();
     }
 
-    public void setArticles(List<Article> articles) {
+    public void setArticles(List<Article> articles, int topSize) {
         if (articles != null) {
+            Log.d(TAG, "setArticles: topSize is " + topSize );
+            this.topSize = topSize;
             this.articles.clear();
             this.articles.addAll(articles);
             notifyDataSetChanged();
