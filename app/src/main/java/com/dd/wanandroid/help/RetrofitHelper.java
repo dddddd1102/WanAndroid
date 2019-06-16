@@ -1,5 +1,8 @@
 package com.dd.wanandroid.help;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.dd.wanandroid.App;
 import com.dd.wanandroid.entity.Article;
 import com.dd.wanandroid.entity.ArticleData;
@@ -21,17 +24,23 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.internal.annotations.EverythingIsNonNull;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -43,11 +52,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitHelper {
 
+    private static final String TAG = "RetrofitHelper";
+
     private volatile static RetrofitHelper sInstance;
 
     private ApiService apiService;
 
     private Gson gson;
+
+    private static HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+
+    public void clearCookies() {
+        cookieStore.clear();
+    }
 
     public static RetrofitHelper getInstance() {
         if (sInstance == null) {
@@ -101,6 +118,34 @@ public class RetrofitHelper {
         okHttpClientBuilder.addNetworkInterceptor(cacheInterceptor);
         okHttpClientBuilder.addInterceptor(cacheInterceptor);
         okHttpClientBuilder.cache(cache);
+        okHttpClientBuilder.cookieJar(new CookieJar() {
+            @EverythingIsNonNull
+            @Override
+            public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                boolean saveCookies = false;
+                if (cookies.size() > 0) {
+                    for (Cookie cookie : cookies) {
+                        Log.d(TAG, "saveFromResponse: cookie=" + cookie.toString());
+                        String name = cookie.name();
+                        if ("loginUserName_wanandroid_com".equals(name)
+                                || "token_pass_wanandroid_com".equals(name)) {
+                            saveCookies = true;
+                            break;
+                        }
+                    }
+                }
+                if (saveCookies) {
+                    cookieStore.put(url.host(), cookies);
+                }
+            }
+
+            @EverythingIsNonNull
+            @Override
+            public List<Cookie> loadForRequest(@NonNull HttpUrl url) {
+                List<Cookie> cookies = cookieStore.get(url.host());
+                return cookies != null ? cookies : new ArrayList<Cookie>();
+            }
+        });
         OkHttpClient client = okHttpClientBuilder.build();
 
         apiService = createRetrofit(client).create(ApiService.class);
@@ -154,5 +199,9 @@ public class RetrofitHelper {
 
     public Observable<BasicData<String>> logout() {
         return apiService.logout();
+    }
+
+    public Observable<BasicData<ArticleData>> getCollectArticles(int page) {
+        return apiService.getCollectArticles(page);
     }
 }

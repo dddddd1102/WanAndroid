@@ -50,4 +50,7 @@ public interface ApiService {
     @GET("/user/logout/json")
     Observable<BasicData<String>> logout();
 
+    @GET("/lg/collect/list/{page}/json")
+    Observable<BasicData<ArticleData>> getCollectArticles(@Path("page") int page);
+
 }

@@ -55,7 +55,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleH
         holder.tvAuthor.setText(article.getAuthor());
         holder.tvChapter.setText(holder.tvTag.getContext().getString(R.string.app_tag, article.getSuperChapterName(), article.getChapterName()));
         holder.tvDate.setText(article.getNiceDate());
-        Log.d(TAG, "onBindViewHolder: topSize=" + topSize + ", position=" + position);
         holder.tvTop.setVisibility(position < topSize ? View.VISIBLE : View.GONE);
         holder.tvNew.setVisibility(article.isFresh() ? View.VISIBLE : View.GONE);
         holder.ivCollection.setVisibility(article.isCollect() ? View.VISIBLE : View.GONE);
@@ -84,8 +83,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleH
 
     public void setArticles(List<Article> articles, int topSize) {
         if (articles != null) {
-            Log.d(TAG, "setArticles: topSize is " + topSize );
-            this.topSize = topSize;
+            ArticleAdapter.topSize = topSize;
             this.articles.clear();
             this.articles.addAll(articles);
             notifyDataSetChanged();

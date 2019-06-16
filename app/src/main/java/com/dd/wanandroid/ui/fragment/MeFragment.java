@@ -19,6 +19,7 @@ import com.dd.wanandroid.R;
 import com.dd.wanandroid.entity.BasicData;
 import com.dd.wanandroid.entity.User;
 import com.dd.wanandroid.help.RetrofitHelper;
+import com.dd.wanandroid.ui.CollectActivity;
 import com.dd.wanandroid.ui.LoginActivity;
 import com.dd.wanandroid.ui.view.ItemView;
 
@@ -50,6 +51,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private ItemView itemLogout;
 
     private AlertDialog alertDialog;
+
+    private User user;
 
     public MeFragment() {
         // Required empty public constructor
@@ -116,7 +119,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
     private void refreshUI() {
         Realm realm = Realm.getDefaultInstance();
-        User user = realm.where(User.class).findFirst();
+        user = realm.where(User.class).findFirst();
         if (user == null) {
             tvUsername.setText(R.string.me_login_or_register);
             clHeader.setClickable(true);
@@ -135,7 +138,11 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
                 break;
             case R.id.item_collect:
-                Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
+                if (user != null) {
+                    startActivity(new Intent(getActivity(), CollectActivity.class));
+                } else {
+                    Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.item_night_mode:
                 Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
@@ -208,6 +215,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void removeLoginInfo() {
+        RetrofitHelper.getInstance().clearCookies();
         Realm realm = Realm.getDefaultInstance();
         final RealmResults<User> realmResults = realm.where(User.class).findAll();
         realm.executeTransaction(new Realm.Transaction() {
