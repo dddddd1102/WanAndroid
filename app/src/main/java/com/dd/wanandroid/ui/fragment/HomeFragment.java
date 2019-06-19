@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.dd.wanandroid.R;
 import com.dd.wanandroid.entity.Article;
@@ -47,6 +49,8 @@ public class HomeFragment extends Fragment {
     private Banner bannerView;
 
     private RecyclerView rvArticle;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private List<BannerInfo> banners;
 
@@ -102,13 +106,13 @@ public class HomeFragment extends Fragment {
 
     private void initView(View rootView) {
         bannerView = rootView.findViewById(R.id.banner);
+        swipeRefreshLayout = rootView.findViewById(R.id.srl);
         rvArticle = rootView.findViewById(R.id.rv_article);
         rvArticle.setLayoutManager(new LinearLayoutManager(getContext()));
         articles = new ArrayList<>();
         articleAdapter = new ArticleAdapter(articles);
         rvArticle.setAdapter(new ArticleAdapter(articles));
         rvArticle.addItemDecoration(new ListDecoration(25));
-
     }
 
 
@@ -219,6 +223,13 @@ public class HomeFragment extends Fragment {
                     intent.setClass(getActivity(), WebActivity.class);
                 }
                 startActivity(intent);
+            }
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getActivity(), "下拉刷新", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
