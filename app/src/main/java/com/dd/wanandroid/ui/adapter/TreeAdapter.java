@@ -1,8 +1,8 @@
 package com.dd.wanandroid.ui.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dd.wanandroid.R;
-import com.dd.wanandroid.entity.Article;
 import com.dd.wanandroid.entity.Tree;
-import com.dd.wanandroid.ui.view.TagLayout;
+import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.List;
 
@@ -27,8 +26,11 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
 
     private List<Tree> trees;
 
-    public TreeAdapter(List<Tree> trees) {
+    private Context context;
+
+    public TreeAdapter(List<Tree> trees, Context context) {
         this.trees = trees;
+        this.context = context;
     }
 
     public void setTrees(List<Tree> trees) {
@@ -42,7 +44,7 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
     @NonNull
     @Override
     public TreeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tree, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_tree, parent, false);
         return new TreeHolder(view);
     }
 
@@ -51,7 +53,24 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
         Tree tree = trees.get(position);
         holder.tvTitle.setText(tree.getName());
         RealmList<Tree> children = tree.getChildren();
-        holder.tagLayout.addTrees(children);
+        initFlexbox(holder.flexboxLayout, children);
+    }
+
+    private void initFlexbox(FlexboxLayout flexboxLayout, RealmList<Tree> children) {
+        flexboxLayout.removeAllViews();
+        flexboxLayout.setFocusableInTouchMode(false);
+        for (int i = 0; i < children.size(); i++) {
+            Tree tree = children.get(i);
+            TextView tagView = (TextView) LayoutInflater.from(flexboxLayout.getContext()).inflate(R.layout.tag_view, flexboxLayout, false);
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) tagView.getLayoutParams();
+            lp.rightMargin = 16;
+            lp.bottomMargin = 16;
+            tagView.setLayoutParams(lp);
+            if (tree != null) {
+                tagView.setText(tree.getName());
+                flexboxLayout.addView(tagView);
+            }
+        }
     }
 
     @Override
@@ -63,13 +82,13 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
 
         ImageView ivArrow;
         TextView tvTitle;
-        TagLayout tagLayout;
+        FlexboxLayout flexboxLayout;
 
         TreeHolder(View itemView) {
             super(itemView);
             ivArrow = itemView.findViewById(R.id.iv_arrow);
             tvTitle = itemView.findViewById(R.id.tv_title);
-            tagLayout = itemView.findViewById(R.id.tl_sub);
+            flexboxLayout = itemView.findViewById(R.id.flexbox_layout);
         }
     }
 }

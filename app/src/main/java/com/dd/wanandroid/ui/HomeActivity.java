@@ -70,7 +70,6 @@ public class HomeActivity extends AppCompatActivity
         treeFragment = TreeFragment.newInstance();
         meFragment = MeFragment.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.layout_content, homeFragment).commit();
-
         hotKeyList = queryHotKeys();
         if (hotKeyList.size() > 0) {
             return;

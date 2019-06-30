@@ -29,7 +29,7 @@ import io.realm.RealmResults;
 
 public class TreeFragment extends Fragment {
 
-    private static final String TAG = "ProjectFragment";
+    private static final String TAG = "TreeFragment";
 
     private RecyclerView rvTree;
 
@@ -62,10 +62,9 @@ public class TreeFragment extends Fragment {
     private void initView(View view) {
         rvTree = view.findViewById(R.id.rv_tree);
         trees = new ArrayList<>();
-        treeAdapter = new TreeAdapter(trees);
+        treeAdapter = new TreeAdapter(trees, getContext());
         rvTree.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTree.setAdapter(treeAdapter);
-
     }
 
     private void initData() {

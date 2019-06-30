@@ -11,7 +11,6 @@ import com.dd.wanandroid.R;
 import com.dd.wanandroid.entity.BasicData;
 import com.dd.wanandroid.entity.HotKey;
 import com.dd.wanandroid.help.RetrofitHelper;
-import com.dd.wanandroid.ui.view.TagLayout;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchActivity";
 
-    private TagLayout tagLayout;
+//    private TagLayout tagLayout;
 
     private List<HotKey> hotKeyList;
 
@@ -40,7 +39,7 @@ public class SearchActivity extends AppCompatActivity {
                 .statusBarColor(R.color.colorPrimaryDark)
                 .init();
         Toolbar toolbar = findViewById(R.id.toolbar);
-        tagLayout = findViewById(R.id.tag_layout);
+//        tagLayout = findViewById(R.id.tag_layout);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,7 +66,6 @@ public class SearchActivity extends AppCompatActivity {
     private void initData() {
         hotKeyList = queryHotKeys();
         if (hotKeyList.size() > 0) {
-            tagLayout.addTags(hotKeyList);
             return;
         }
         RetrofitHelper.getInstance().getHotKeys().subscribeOn(Schedulers.io())
@@ -82,7 +80,6 @@ public class SearchActivity extends AppCompatActivity {
                     public void onNext(BasicData<List<HotKey>> listBasicData) {
                         if (listBasicData.getErrorCode() == 0) {
                             hotKeyList = listBasicData.getData();
-                            tagLayout.addTags(hotKeyList);
                             saveHotKeys();
                         }
                     }
@@ -100,12 +97,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void initEvent() {
-        tagLayout.setOnTagIndexClickListener(new TagLayout.OnTagIndexClickListener() {
-            @Override
-            public void onClickIndex(int index) {
-                Toast.makeText(SearchActivity.this, "select: " + hotKeyList.get(index).getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private List<HotKey> queryHotKeys() {
