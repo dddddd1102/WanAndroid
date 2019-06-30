@@ -1,6 +1,7 @@
 package com.dd.wanandroid.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import com.dd.wanandroid.R;
 import com.dd.wanandroid.entity.BasicData;
 import com.dd.wanandroid.entity.Tree;
 import com.dd.wanandroid.help.RetrofitHelper;
+import com.dd.wanandroid.ui.TagActivity;
 import com.dd.wanandroid.ui.adapter.TreeAdapter;
 
 import java.util.ArrayList;
@@ -105,7 +107,14 @@ public class TreeFragment extends Fragment {
     }
 
     private void initEvent() {
-
+        treeAdapter.setOnItemClickListener(new TreeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(getActivity(), TagActivity.class);
+                intent.putExtra("tree_id", trees.get(position).getId());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

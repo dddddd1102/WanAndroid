@@ -28,6 +28,12 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
 
     private Context context;
 
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public TreeAdapter(List<Tree> trees, Context context) {
         this.trees = trees;
         this.context = context;
@@ -50,10 +56,19 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TreeHolder holder, int position) {
+        final int index = position;
         Tree tree = trees.get(position);
         holder.tvTitle.setText(tree.getName());
         RealmList<Tree> children = tree.getChildren();
         initFlexbox(holder.flexboxLayout, children);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onItemClick(index);
+                }
+            }
+        });
     }
 
     private void initFlexbox(FlexboxLayout flexboxLayout, RealmList<Tree> children) {
@@ -90,5 +105,9 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.TreeHolder> {
             tvTitle = itemView.findViewById(R.id.tv_title);
             flexboxLayout = itemView.findViewById(R.id.flexbox_layout);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }

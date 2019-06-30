@@ -145,6 +145,7 @@ public class HomeFragment extends Fragment {
                             } else {
                                 queryData();
                             }
+
                         }
                     }
 
