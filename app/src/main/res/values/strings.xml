@@ -55,4 +55,10 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
+    <!-- About -->
+    <string name="about_github">Github</string>
+    <string name="about_author">作者</string>
+    <string name="about_version">版本</string>
+    <string name="about_dd">daidong</string>
+    <string name="about_github_account">dddddd1102</string>
 </resources>

@@ -19,6 +19,7 @@ import com.dd.wanandroid.R;
 import com.dd.wanandroid.entity.BasicData;
 import com.dd.wanandroid.entity.User;
 import com.dd.wanandroid.help.RetrofitHelper;
+import com.dd.wanandroid.ui.AboutActivity;
 import com.dd.wanandroid.ui.CollectActivity;
 import com.dd.wanandroid.ui.LoginActivity;
 import com.dd.wanandroid.ui.view.ItemView;
@@ -151,7 +152,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.item_about:
-                Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
             case R.id.item_logout:
                 showLogout();

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.AboutActivity"
+    tools:showIn="@layout/activity_about">
+
+    <TextView android:id="@+id/tv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/app_version"
+        android:textSize="@dimen/secondary_text_size"
+        android:gravity="center"
+        android:layout_marginTop="30dp"/>
+
+    <com.dd.wanandroid.ui.view.ItemView
+        android:id="@+id/item_github"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/white"
+        android:text="@string/about_github"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:item_content="@string/about_github_account"
+        app:has_icon="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_icon" />
+
+    <com.dd.wanandroid.ui.view.ItemView
+        android:id="@+id/item_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:text="@string/about_author"
+        app:has_icon="false"
+        app:item_content="@string/about_dd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_github" />
+
+    <com.dd.wanandroid.ui.view.ItemView
+        android:id="@+id/item_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:text="@string/about_version"
+        app:has_icon="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_author" />
+
+
+
+</android.support.constraint.ConstraintLayout>

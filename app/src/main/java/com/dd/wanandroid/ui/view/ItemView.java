@@ -23,11 +23,15 @@ public class ItemView extends ConstraintLayout {
 
     private boolean hasSwitch = false;
 
+    private boolean hasIcon = true;
+
     private ImageView ivIcon;
 
     private TextView tvTitle;
 
     private Switch switchMode;
+
+    private TextView tvContent;
 
     public ItemView(Context context) {
         this(context, null);
@@ -43,6 +47,7 @@ public class ItemView extends ConstraintLayout {
         ivIcon = findViewById(R.id.iv_icon);
         tvTitle = findViewById(R.id.tv_title);
         switchMode = findViewById(R.id.switch_mode);
+        tvContent = findViewById(R.id.tv_content);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ItemView);
         Drawable d = a.getDrawable(R.styleable.ItemView_android_src);
         if (d != null) {
@@ -52,10 +57,29 @@ public class ItemView extends ConstraintLayout {
         if (!TextUtils.isEmpty(c)) {
             tvTitle.setText(c);
         }
+
         hasSwitch = a.getBoolean(R.styleable.ItemView_has_switch, hasSwitch);
+        hasIcon = a.getBoolean(R.styleable.ItemView_has_icon, hasIcon);
         switchMode.setVisibility(hasSwitch ? VISIBLE : GONE);
+        ivIcon.setVisibility(hasIcon ? VISIBLE : GONE);
+        CharSequence content = a.getText(R.styleable.ItemView_item_content);
+        if (!TextUtils.isEmpty(content)) {
+            switchMode.setVisibility(GONE);
+            tvContent.setVisibility(VISIBLE);
+            tvContent.setText(content);
+        } else {
+            tvContent.setVisibility(GONE);
+        }
         a.recycle();
+    }
 
-
+    public void setContent(String content) {
+        if (!TextUtils.isEmpty(content)) {
+            switchMode.setVisibility(GONE);
+            tvContent.setVisibility(VISIBLE);
+            tvContent.setText(content);
+        } else {
+            tvContent.setVisibility(GONE);
+        }
     }
 }

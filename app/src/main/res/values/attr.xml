@@ -49,5 +49,7 @@
         <attr name="has_switch" format="boolean" />
         <attr name="android:src" />
         <attr name="android:text" />
+        <attr name="has_icon" format="boolean" />
+        <attr name="item_content" format="reference|string" />
     </declare-styleable>
 </resources>
