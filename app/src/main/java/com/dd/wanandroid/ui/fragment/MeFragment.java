@@ -23,7 +23,9 @@ import com.dd.wanandroid.ui.AboutActivity;
 import com.dd.wanandroid.ui.CollectActivity;
 import com.dd.wanandroid.ui.LoginActivity;
 import com.dd.wanandroid.ui.view.ItemView;
+import com.dd.wanandroid.util.SpUtils;
 
+import cn.like.nightmodel.NightModelManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -55,6 +57,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
     private User user;
 
+    private OnNightModeChangedListener onNightModeChangedListener;
+
+    private boolean nightMode = false;
+
     public MeFragment() {
         // Required empty public constructor
     }
@@ -82,11 +88,13 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        onNightModeChangedListener = (OnNightModeChangedListener) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        onNightModeChangedListener = null;
     }
 
     private void initView() {
@@ -101,6 +109,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
+        nightMode = SpUtils.queryNightMode(getActivity());
     }
 
     private void initEvent() {
@@ -110,6 +119,15 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         itemSetting.setOnClickListener(this);
         itemAbout.setOnClickListener(this);
         itemLogout.setOnClickListener(this);
+        itemNightMode.setOnSwitchChangedListener(new ItemView.OnSwitchChangedListener() {
+            @Override
+            public void onSwitchChanged(boolean isChecked) {
+                SpUtils.saveNightMode(getContext(), isChecked);
+                if (onNightModeChangedListener != null) {
+                    onNightModeChangedListener.onNightModeChanged(isChecked);
+                }
+            }
+        });
     }
 
     @Override
@@ -119,6 +137,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void refreshUI() {
+        itemNightMode.setChecked(nightMode);
         Realm realm = Realm.getDefaultInstance();
         user = realm.where(User.class).findFirst();
         if (user == null) {
@@ -146,7 +165,19 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.item_night_mode:
-                Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
+                if (itemNightMode.isChecked()) {
+                    itemNightMode.setChecked(false);
+                    SpUtils.saveNightMode(getContext(), false);
+                    if (onNightModeChangedListener != null) {
+                        onNightModeChangedListener.onNightModeChanged(false);
+                    }
+                } else {
+                    itemNightMode.setChecked(true);
+                    SpUtils.saveNightMode(getContext(), true);
+                    if (onNightModeChangedListener != null) {
+                        onNightModeChangedListener.onNightModeChanged(true);
+                    }
+                }
                 break;
             case R.id.item_setting:
                 Toast.makeText(getActivity(), "功能开发中...", Toast.LENGTH_SHORT).show();
@@ -225,6 +256,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 realmResults.deleteAllFromRealm();
             }
         });
+    }
+
+    public interface OnNightModeChangedListener {
+        void onNightModeChanged(boolean nightMode);
     }
 
 }

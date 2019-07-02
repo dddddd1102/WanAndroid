@@ -27,6 +27,7 @@ import com.dd.wanandroid.ui.fragment.TreeFragment;
 
 import java.util.List;
 
+import cn.like.nightmodel.NightModelManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -35,7 +36,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class HomeActivity extends AppCompatActivity
-        implements View.OnClickListener {
+        implements View.OnClickListener, MeFragment.OnNightModeChangedListener {
 
     private static final String TAG = "WanAndroid#HomeActivity";
 
@@ -52,11 +53,19 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        NightModelManager.getInstance().attach(this);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
         initView();
         initData();
         initEvent();
+    }
+
+    @Override
+    protected void onDestroy() {
+        NightModelManager.getInstance().detach(this);
+        super.onDestroy();
     }
 
     private void initView() {
@@ -168,5 +177,15 @@ public class HomeActivity extends AppCompatActivity
             realm.copyToRealmOrUpdate(hotKey);
         }
         realm.commitTransaction();
+    }
+
+    @Override
+    public void onNightModeChanged(boolean nightMode) {
+        Log.d(TAG, "onNightModeChanged: nightMode=" + nightMode);
+        if (nightMode) {
+            NightModelManager.getInstance().applyNightModel(this);
+        } else {
+            NightModelManager.getInstance().applyDayModel(this);
+        }
     }
 }

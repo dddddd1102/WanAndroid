@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import com.dd.wanandroid.R;
 import com.dd.wanandroid.ui.view.ItemView;
+import com.dd.wanandroid.util.SpUtils;
 import com.gyf.immersionbar.ImmersionBar;
+
+import cn.like.nightmodel.NightModelManager;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -20,6 +23,7 @@ public class AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        NightModelManager.getInstance().attach(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ImmersionBar.with(this)
@@ -45,6 +49,12 @@ public class AboutActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        NightModelManager.getInstance().detach(this);
+        super.onDestroy();
+    }
+
     private void initView() {
         tvIcon = findViewById(R.id.tv_icon);
         itemVersion = findViewById(R.id.item_version);
@@ -53,6 +63,11 @@ public class AboutActivity extends AppCompatActivity {
     private void initData() {
         tvIcon.setText(getVersion());
         itemVersion.setContent(getVersion());
+        if (SpUtils.queryNightMode(this)) {
+            NightModelManager.getInstance().applyNightModel(this);
+        } else {
+            NightModelManager.getInstance().applyDayModel(this);
+        }
     }
 
     private String getVersion() {

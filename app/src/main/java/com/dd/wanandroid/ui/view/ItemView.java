@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -32,6 +33,12 @@ public class ItemView extends ConstraintLayout {
     private Switch switchMode;
 
     private TextView tvContent;
+
+    private OnSwitchChangedListener listener;
+
+    public void setOnSwitchChangedListener(OnSwitchChangedListener listener) {
+        this.listener = listener;
+    }
 
     public ItemView(Context context) {
         this(context, null);
@@ -71,6 +78,7 @@ public class ItemView extends ConstraintLayout {
             tvContent.setVisibility(GONE);
         }
         a.recycle();
+        initEvent();
     }
 
     public void setContent(String content) {
@@ -81,5 +89,28 @@ public class ItemView extends ConstraintLayout {
         } else {
             tvContent.setVisibility(GONE);
         }
+    }
+
+    private void initEvent() {
+        switchMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (listener != null) {
+                    listener.onSwitchChanged(isChecked);
+                }
+            }
+        });
+    }
+
+    public boolean isChecked() {
+        return switchMode.isChecked();
+    }
+
+    public void setChecked(boolean checked) {
+        switchMode.setChecked(checked);
+    }
+
+    public interface OnSwitchChangedListener {
+        void onSwitchChanged(boolean isChecked);
     }
 }

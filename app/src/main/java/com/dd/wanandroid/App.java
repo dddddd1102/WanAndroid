@@ -3,6 +3,7 @@ package com.dd.wanandroid;
 import android.app.Application;
 import android.content.Context;
 
+import cn.like.nightmodel.NightModelManager;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -24,6 +25,7 @@ public class App extends Application {
                 .name("wanandroid.realm")
                 .deleteRealmIfMigrationNeeded()
                 .build());
+        NightModelManager.getInstance().init(this);
     }
 
     public static Context getContext() {
